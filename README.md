@@ -1,6 +1,6 @@
 # vue-proxy
 
-开发`vue.js`的项目时，开发环境下通过代理访问后台服务，生成环境则直接把静态页面文件放在所在`http`服务上。本项目是基于`vue-cli`，后台使用已有的一个[demo](https://github.com/wscj/express-demo)，实际开发中可以是其他的服务器，如`tomcat`、`iis`等
+开发`vue.js`的项目时，开发环境下通过代理访问后台服务，生产环境则直接把静态页面文件放在所在`http`服务上。本项目是基于`vue-cli`，后台使用已有的一个[demo](https://github.com/wscj/express-demo)，实际开发中可以是其他的服务器，如`tomcat`、`iis`等
 
 #### 主要配置
 
@@ -9,7 +9,7 @@ module.exports = {
   dev: {
     proxyTable: {
       '/api': {
-        target: 'http://192.168.191.1:4000',
+        target: 'http://192.168.191.1:4000', // 目标服务
         changeOrigin: true,
         // pathRewrite: {
         //   '^/api': '/api'
@@ -25,16 +25,13 @@ module.exports = {
 ```javascript
 methods: {
   get () {
-    this.$http.get('/api/ajax', { params: { sendMsg: 'Get request here' } }).then(
-      (r) => {
-        if (r.body.msg) {
-          this.$el.querySelector('div[name=result]').innerText = r.body.msg;
-        }
-      },
-      (r) => {
-        console.log('fail');
-      }
-    )
+    this.$http.get('/api/ajax', { params: { sendMsg: 'Get request here' } })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.error(err);
+      })
   }
 }
 ```
